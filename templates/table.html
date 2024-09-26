@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Table {{ table_id }} Info</h1>
+    <p>Minimum people: {{ info['min_people'] }}</p>
+    <p>Minimum spend: ${{ info['min_spend'] }}</p>
+
+    <form id="confirm-form">
+        <button type="submit">Confirm Table</button>
+    </form>
+
+    <script>
+        document.getElementById('confirm-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/confirm_table', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    table_id: {{ table_id }},
+                    customer_id: 123  // 这里可以动态修改为顾客的ID
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  alert(data.message);
+              });
+        });
+    </script>
+</body>
+</html>
